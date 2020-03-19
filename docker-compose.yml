@@ -1,6 +1,6 @@
 version: '3'
 services:
-  postgres: 
+  postgres:
     image: 'postgres:latest'
     environment:
       - POSTGRES_PASSWORD=postgres_password
@@ -11,6 +11,9 @@ services:
     build:
       dockerfile: Dockerfile.dev
       context: ./nginx
+    depends_on: 
+      - client
+      - api
     ports:
       - '3050:80'
   api:
@@ -22,6 +25,9 @@ services:
     volumes:
       - /app/node_modules
       - ./server:/app
+    depends_on: 
+      - postgres
+      - redis
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
